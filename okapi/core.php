@@ -108,7 +108,29 @@ class OkapiExceptionHandler
 
             print $e->getOkapiJSON();
         }
-        else # (ErrorException, MySQL exception etc.)
+        elseif ($e instanceof DbLockWaitTimeoutException)
+        {
+            # As long as it happens occasionally only, it is safe to silently cast
+            # this error into a HTTP 503 response. (In the future, we might want to
+            # measure the frequency of such errors too.)
+
+            if (!headers_sent())
+            {
+                header("HTTP/1.0 503 Service Unavailable");
+                header("Access-Control-Allow-Origin: *");
+                header("Content-Type: application/json; charset=utf-8");
+            }
+
+            print json_encode(array("error" => array(
+                'developer_message' => (
+                    "OKAPI is experiencing an increased server load and cannot handle your ".
+                    "request just now. Please repeat your request in a minute. If this ".
+                    "problem persists, then please contact us at: ".
+                    implode(", ", get_admin_emails())
+                )
+            )));
+        }
+        else # (ErrorException, SQL syntax exception etc.)
         {
             # This one is thrown on PHP notices and warnings - usually this
             # indicates an error in OKAPI method. If thrown, then something
@@ -1084,8 +1106,8 @@ class Okapi
     public static $server;
 
     /* These two get replaced in automatically deployed packages. */
-    public static $version_number = 1338;
-    public static $git_revision = '5e29f2e4421553312b085993c1fdab9e97d10363';
+    public static $version_number = 1341;
+    public static $git_revision = '5ecff8222d940e44bfc7f285880091ccfdaef025';
 
     private static $okapi_vars = null;
 
@@ -2183,6 +2205,21 @@ class Okapi
             header("Content-Type: text/plain; charset=utf-8");
             print "I need a cookie!";
             die();
+        }
+    }
+
+    /**
+     * Update the "last activity" field of the user. As explained in #337, it is stored
+     * in `last_login` column and is needed for some reports. As explained in #439, it
+     * shouldn't be updated automatically on each Level 3 request (because some of these
+     * requests are not necessarilly initiated by the user).
+     */
+    public static function update_user_activity($request) {
+        if ($request && $request->token && $request->token->token_type == "access") {
+            Db::execute("
+                update user set last_login=now()
+                where user_id='".Db::escape_string($request->token->user_id)."'
+            ");
         }
     }
 
