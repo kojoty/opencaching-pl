@@ -3,6 +3,7 @@
 ob_start();
 
 use Utils\Database\XDb;
+use Utils\I18n\I18n;
 
 /* Bounding Box:
   BBOX=2.38443,48.9322,27.7053,55.0289
@@ -39,11 +40,13 @@ if ((abs($lon_from - $lon_to) > 2) || (abs($lat_from - $lat_to) > 2)) {
     $lat_from = $lat_to;
 }
 
+$language = I18n::getCurrentLang();
+
 $rs = XDb::xSql(
     "SELECT `caches`.`cache_id` `cacheid`, `caches`.`longitude` `longitude`, `caches`.`latitude` `latitude`,
             `caches`.`status` `status`, `caches`.`type` `type`, `caches`.`date_hidden` `date_hidden`,
             `caches`.`name` `name`, `caches`.`wp_oc` `cache_wp`,
-            `cache_type`.`" . $lang . "` `typedesc`, `cache_size`.`" . $lang . "` `sizedesc`,
+            `cache_type`.`" . $language . "` `typedesc`, `cache_size`.`" . $language . "` `sizedesc`,
             `caches`.`terrain` `terrain`, `caches`.`difficulty` `difficulty`,
             `user`.`username` `username`
     FROM `caches`, `cache_type`, `cache_size`, `user`

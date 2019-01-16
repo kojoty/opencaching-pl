@@ -6,6 +6,7 @@ use lib\Objects\GeoCache\PrintList;
 use Utils\Text\TextConverter;
 use Utils\Uri\OcCookie;
 use lib\Objects\Coordinates\Coordinates;
+use Utils\I18n\I18n;
 
 require_once (__DIR__.'/lib/common.inc.php');
 require_once (__DIR__.'/lib/search.inc.php');
@@ -13,7 +14,7 @@ require_once (__DIR__.'/lib/search-signatures.inc.php');
 require_once (__DIR__.'/lib/export.inc.php');
 require_once (__DIR__.'/lib/calculation.inc.php');
 
-global $dbcSearch, $lang, $TestStartTime, $usr;
+global $dbcSearch, $TestStartTime, $usr;
 
 
 /**
@@ -1171,8 +1172,8 @@ if ($usr == false) {
 function outputSearchForm($options)
 {
     global $usr, $error_plz, $error_locidnocoords, $error_ort, $error_noort, $error_nofulltext;
-    global $default_lang, $search_all_countries, $cache_attrib_jsarray_line, $cache_attrib_img_line;
-    global $lang, $config;
+    global $search_all_countries, $cache_attrib_jsarray_line, $cache_attrib_img_line;
+    global $config;
 
     //simple mode (only one easy filter)
     $filters = file_get_contents('./tpl/stdstyle/search.simple.tpl.php');
@@ -1462,15 +1463,16 @@ function outputSearchForm($options)
 
     // Typ skrzynki
     $cachetype_options = '';
-                if(Xdb::xContainsColumn('cache_type',$lang) )
-                    $lang_db = XDb::xEscape($lang);
-                else
-                    $lang_db = "en";
+
+    $lang_db = I18n::getLangForDbTranslations('cache_type');
 
     $rs = XDb::xSql("SELECT `id`, `$lang_db`, `icon_large` FROM `cache_type` ORDER BY `sort`");
     for ($i = 0; $i < XDb::xNumRows($rs); $i++)
     {
         $record = XDb::xFetchArray($rs);
+
+        //$default_lang = I18n::getCurrentLang();
+
 
         /*
         if ($record['id'] == $options['cachetype'])
@@ -1521,11 +1523,8 @@ function outputSearchForm($options)
     //Rozmiar skrzynki
 
     $cachesize_options = '';
-    if (Xdb::xContainsColumn('cache_size',$lang))
-        $lang_db = XDb::xEscape($lang);
-    else
-        $lang_db = "en";
 
+    $lang_db = I18n::getLangForDbTranslations('cache_size');
     $rs = XDb::xSql("SELECT `id`, `$lang_db` FROM `cache_size` ORDER BY `id`");
     for ($i = 0; $i < XDb::xNumRows($rs); $i++)
     {
@@ -1596,7 +1595,7 @@ function attr_image($tpl, $options, $id, $textlong, $iconlarge, $iconno, $iconun
     // select attributes depend on specified language.
     $database = OcDb::instance();
     $query = "SELECT `id`, `text_long`, `icon_large`, `icon_no`, `icon_undef`, `category` FROM `cache_attrib` WHERE `language` LIKE :1 ORDER BY `id`";
-    $s = $database->multiVariableQuery($query, strtoupper($lang));
+    $s = $database->multiVariableQuery($query, strtoupper(I18n::getCurrentLang()));
     // if specified language is in database
     if($database->rowCount($s) <= 0) {
          // if we have not specified language in db, just use english.

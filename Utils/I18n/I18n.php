@@ -10,6 +10,7 @@ use Utils\Debug\Debug;
 class I18n
 {
     const FAILOVER_LANGUAGE = 'en';
+    const COOKIE_LANG_VAR = 'lang';
 
     private $currentLanguage;
     private $trArray;
@@ -50,10 +51,12 @@ class I18n
      */
     public static function getCurrentLang()
     {
-        // temporary use external global var
-        global $lang;
-        return $lang;
-        // return $this->currentLanguage;
+        return self::instance()->currentLanguage;
+    }
+
+    public static function getLangForDbTranslations()
+    {
+        return self::getCurrentLang();
     }
 
     /**
@@ -89,8 +92,8 @@ class I18n
      */
     public static function isTranslationAvailable($str)
     {
-        $instance = self::instance();
         $language = self::getCurrentLang();
+        $instance = self::instance();
         return isset($instance->trArray[$language][$str]) && $instance->trArray[$language][$str];
     }
 
@@ -124,7 +127,7 @@ class I18n
         if (isset($_REQUEST['lang'])) {
             return $_REQUEST['lang'];
         } else {
-            return OcCookie::getOrDefault('lang', $this->getDefaultLang());
+            return OcCookie::getOrDefault(self::COOKIE_LANG_VAR, $this->getDefaultLang());
         }
     }
 
@@ -188,10 +191,8 @@ class I18n
 
     private function setCurrentLang($languageCode)
     {
-        // temporary use global var also
-        global $lang;
-        $lang = $languageCode;
         $this->currentLanguage = $languageCode;
+        OcCookie::set(self::COOKIE_LANG_VAR, $languageCode, true);
     }
 
     /**
@@ -207,14 +208,14 @@ class I18n
         return OcConfig::instance()->getI18Config()['defaultLang'];
     }
 
-    private function isLangSupported($lang){
+    private function isLangSupported($langCode){
 
         if (CrowdinInContextMode::isSupportedInConfig()) {
-            if ($lang == CrowdinInContextMode::getPseudoLang() ){
+            if ($langCode == CrowdinInContextMode::getPseudoLang() ){
                 return true;
             }
         }
-        return in_array($lang, $this->getSupportedTranslations());
+        return in_array($langCode, $this->getSupportedTranslations());
     }
 
     private function handleUnsupportedLangAndExit($requestedLang)
