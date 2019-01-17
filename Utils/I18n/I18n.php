@@ -7,11 +7,13 @@ use Utils\Uri\Uri;
 use lib\Objects\OcConfig\OcConfig;
 use Utils\Debug\Debug;
 use Utils\Database\XDb;
+use Utils\Uri\SimpleRouter;
 
 class I18n
 {
     const FAILOVER_LANGUAGE = 'en';
     const COOKIE_LANG_VAR = 'lang';
+    const URI_LANG_VAR = 'lang';
 
     private $currentLanguage;
     private $trArray;
@@ -118,7 +120,7 @@ class I18n
             if (!isset($currentLang) || $language != $currentLang) {
                 $result[$language]['name'] = $language;
                 $result[$language]['img'] = '/images/flags/' . $language . '.svg';
-                $result[$language]['link'] = Uri::setOrReplaceParamValue('lang',$language);
+                $result[$language]['link'] = Uri::setOrReplaceParamValue(self::URI_LANG_VAR, $language);
             }
         }
         return $result;
@@ -129,19 +131,21 @@ class I18n
      */
     private function getInitLang()
     {
-        // first check if CrowdinInContext is enabled - then use pseudoLang
-        CrowdinInContextMode::initHandler();
-        if (CrowdinInContextMode::enabled()) {
-            // CrowdinInContext mode is enabled => force loading crowdin "pseudo" lang
+        if (isset($_REQUEST['lang'])) {
+            // language switch is requested
+            $langToUse = $_REQUEST[self::URI_LANG_VAR];
+        } else {
+            // use previous lang or default
+            $langToUse = OcCookie::getOrDefault(self::COOKIE_LANG_VAR, $this->getDefaultLang());
+        }
+
+        // check request for CrowdinInContext mode commands
+        CrowdinInContextMode::checkRequest($langToUse);
+        if (CrowdinInContextMode::enabled()){
             return CrowdinInContextMode::getPseudoLang();
         }
 
-        // language changed
-        if (isset($_REQUEST['lang'])) {
-            return $_REQUEST['lang'];
-        } else {
-            return OcCookie::getOrDefault(self::COOKIE_LANG_VAR, $this->getDefaultLang());
-        }
+        return $langToUse;
     }
 
     private function translate($str, $langCode=null, $skipPostprocess=null)
@@ -216,7 +220,7 @@ class I18n
         return OcConfig::instance()->getI18Config()['supportedLanguages'];
     }
 
-    private function getDefaultLang()
+    public static function getDefaultLang()
     {
         return OcConfig::instance()->getI18Config()['defaultLang'];
     }
