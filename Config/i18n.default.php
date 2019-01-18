@@ -11,16 +11,11 @@
 $config = [];
 
 /**
- * Default node language
- */
-$config['defaultLang'] = 'en';
-
-/**
- * List of languages supported by node.
+ * List of languages supported by node, in the order of preference.
  * Use two-lower-letters codes.
  * Please note that for now still we have also translations in DB!
  */
-$config['supportedLanguages'] = ['pl', 'en', 'nl', 'ro'];
+$config['supportedLanguages'] = ['en', 'pl', 'nl', 'ro'];
 
 
 

@@ -29,6 +29,12 @@ if (!isset($GLOBALS['rootpath'])) {
 
 require_once __DIR__ . '/autoload.php';
 
+$ocplAutoloader = __DIR__.'/../lib/ClassPathDictionary.php';
+if (file_exists($ocplAutoloader)) {
+    require_once $ocplAutoloader;
+}
+unset($ocplAutoloader);
+
 if (ob_list_handlers() === ['default output handler']) {
     # We will assume that this one comes from "output_buffering" being turned on
     # in PHP config. This is very common and probably is good for most other OC
@@ -38,11 +44,6 @@ if (ob_list_handlers() === ['default output handler']) {
 
 # Errorhandler should be initialized before calling any other OKAPI code
 OkapiErrorHandler::init();
-
-$extAutoloader = Settings::get('EXTERNAL_AUTOLOADER');
-if ($extAutoloader) {
-    require_once $extAutoloader;
-}
 
 Okapi::gettext_domain_init();
 OkapiScriptEntryPointController::dispatch_request($_SERVER['REQUEST_URI']);

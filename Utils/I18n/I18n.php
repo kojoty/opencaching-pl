@@ -222,7 +222,7 @@ class I18n
 
     public static function getDefaultLang()
     {
-        return OcConfig::instance()->getI18Config()['defaultLang'];
+        return OcConfig::instance()->getI18Config()['supportedLanguages'][0];
     }
 
     private function isLangSupported($langCode){

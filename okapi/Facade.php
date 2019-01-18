@@ -39,13 +39,14 @@ use okapi\lib\OCSession;
 
 require_once __DIR__ . '/autoload.php';
 
+$ocplAutoloader = __DIR__.'/../lib/ClassPathDictionary.php';
+if (file_exists($ocplAutoloader)) {
+    require_once $ocplAutoloader;
+}
+unset($ocplAutoloader);
+
 OkapiErrorHandler::init();
 Okapi::init_internals();
-
-$extAutoloader = Settings::get('EXTERNAL_AUTOLOADER');
-if ($extAutoloader) {
-    require_once $extAutoloader;
-}
 
 /**
  * Use this class to access OKAPI's services from external code (i.e. OC code).

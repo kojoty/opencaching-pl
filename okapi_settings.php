@@ -2,6 +2,8 @@
 
 namespace okapi;
 
+use lib\Objects\OcFacade;
+
 function get_okapi_settings()
 {
     # This comment is here for all international OC developers. This
@@ -44,8 +46,8 @@ function get_okapi_settings()
         'DB_NAME' => $dbname,
         'DB_USERNAME' => $dbusername,
         'DB_PASSWORD' => $dbpasswd,
-        'SITELANG' => 'en', //TODO: how to read it from I18n class?
-        'SITELANGS' => array_map('strtolower', $config['defaultLanguageList']),
+        'SITELANG' => OcFacade::getSiteLanguages()[0],
+        'SITELANGS' => OcFacade::getSiteLanguages(),
         'SITE_URL' => isset($OKAPI_server_URI) ? $OKAPI_server_URI : $absolute_server_URI,
         'VAR_DIR' => rtrim($dynbasepath, '/'),
         'TILEMAP_FONT_PATH' => $config['okapi']['tilemap_font_path'],

@@ -2,7 +2,6 @@
 
 namespace lib\Objects\OcConfig;
 
-use lib\Objects\ApplicationContainer;
 use Utils\Debug\Debug;
 
 /**
@@ -156,7 +155,9 @@ abstract class ConfigReader
      */
     public static function getOcNode()
     {
-        if(!is_null($ocNode = ApplicationContainer::GetOcNode())){
+        static $ocNode;
+
+        if ($ocNode !== null) {
             return $ocNode;
         }
 
@@ -171,8 +172,8 @@ abstract class ConfigReader
                 $config['ocNode'] = "pl";
             }
 
-            ApplicationContainer::SetOcNode($config['ocNode']);
-            return $config['ocNode'];
+            $ocNode = $config['ocNode'];
+            return $ocNode;
         }
 
         // try to load from local config file
@@ -188,17 +189,14 @@ abstract class ConfigReader
                 $config['ocNode'] = "pl";
             }
 
-            ApplicationContainer::SetOcNode($config['ocNode']);
-            return $config['ocNode'];
+            $ocNode = $config['ocNode'];
+            return $ocNode;
         }
 
-        Debug::errorLog(__METHOD__.": ERROR: Can't locate both legacy and non-legacy config files:".
-            self::LEGACY_LOCAL_CONFIG.' and '.$localConfigFile);
-
-        // TODO: how to handle such error !?
-        echo "FATAL-ERROR!";
-        exit;
-
+        throw new \Exception(
+            "Can't locate both legacy and non-legacy config files: " .
+            self::LEGACY_LOCAL_CONFIG.' and '.$localConfigFile
+        );
     }
 
     abstract public static function instance();
