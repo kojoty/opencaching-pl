@@ -1,0 +1,54 @@
+## Description of OCPL folders structure
+
+### Inspirations and assumptions
+
+ - The idea of PHP universal structure of project: [https://github.com/php-pds/skeleton](https://github.com/php-pds/skeleton)
+ - OCPL needs some cleanup
+
+### Folders structure: root-level folders
+### `/` (project root folder)
+- **access**: NO access for webserver (PHP not allowed)
+- finally it contains only:
+	- README.md
+	- LICENSE.txt
+	- .htaccess
+	- .gitignore
+- **migration**: all scripts from here will be temporary migrated to `/public`, but finally should be refactored to controllers  
+
+### `/bin/` 
+- **access**: NO access for webserver (PHP not allowed) - only command line
+ - root-level directory for command-line executable files
+ - **migration:**  contains scripts which are used ONLY from command-line - now OCPL has such in :
+	 - `/ci`
+	 - `/util.sec`
+	 - ...?
+
+### `/config/`
+- **access**: NO access from Internet, PHP allowed
+- root-level directory for configuration files
+- contains ONLY config files (PHP) 
+- **migration**: current `/Config` will be just renamed to `/config` + config scripts needs to be fixed
+
+### `/docs/`
+- **access**: NO access for webserver (PHP not allowed)
+- root-level directory for documentation files
+- all doc files should be in markdown if possible
+
+### `/public/`
+- **access**: NO access for webserver (PHP not allowed) - only command line
+- root-level directory for web server files
+- this folder contains in generally: 
+	- index.php - the only PHP (dynamic) file here
+	- JS files 
+	- hosted JS libs (like tinyMCE)
+	- CSSes
+	- other STATIC files
+- folder structure - check below 
+
+### `/resources/`
+- **access**: RW for webserver, PHP not allowed
+- a root-level directory for other resource files
+
+### `/src/`
+- **access**: No access from Internet, PHP allowed
+- a root-level directory for PHP source code files
