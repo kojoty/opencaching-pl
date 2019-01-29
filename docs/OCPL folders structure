@@ -43,11 +43,14 @@
 	- hosted JS libs (like tinyMCE)
 	- CSSes
 	- other STATIC files
-- folder structure - check below 
+- folder structure - see below 
+- **migration** - see below
 
 ### `/resources/`
 - **access**: RW for webserver, PHP not allowed
-- a root-level directory for other resource files
+- a root-level directory for files which needs webserver RW access for uploaded files etc.
+- let's store main directory structure in git, but the content should be ignored (by git-ignore)
+- **migration** this should become more-less this what we called "ocpl-dynamic" so far
 
 ### `/src/`
 - **access**: No access from Internet, PHP allowed
