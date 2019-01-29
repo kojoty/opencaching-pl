@@ -1,12 +1,11 @@
 # Description of OCPL folders structure
 
-1. Inspirations and assumptions
-------------
+## 1. Inspirations and assumptions
 	 - The idea of PHP universal structure of project: [https://github.com/php-pds/skeleton](https://github.com/php-pds/skeleton)
 	 - OCPL needs some cleanup
 
-2. TODOs:
-------------
+## 2. TODOs:
+
 	1. I'm not sure what is optimal way of handling these dirs: 
 		- `/okapi`
 		- `/mobile`
@@ -16,8 +15,8 @@
 	2. `/resources/` folder as new 'ocpl-dynamic'
 		- is this a good idea to store in with git...?
 
-3. Folders structure: root-level folders
-------------
+## 3. Folders structure: root-level folders
+
 ### `/` (project root folder)
 	- **access**: NO access for webserver (PHP not allowed)
 	- finally it contains only:
@@ -71,8 +70,8 @@
 	- folder structure - see below
 	- **migration** - almost all PHP scripts shoudl finally land here, but we need to migrate it partially
 
-4. `/public/` folder structure
-------------
+## 4. `/public/` folder structure
+
 ### `/public/index.php`
 	- ENTRY POINT to the whole OCPL code - this cde shoudl route requests to proper Controller
 	- finally it should be the only PHP script in `/public` folder
@@ -89,7 +88,7 @@
 ### `/public/views/`
 ### `/public/images/`
 
-5. `/srv/` folder structure
+## 5. `/srv/` folder structure
 ### `/srv/Controllers/`
 ### `/srv/Models/`
 ### `/srv/Views/`
