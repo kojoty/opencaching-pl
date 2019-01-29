@@ -73,25 +73,41 @@
 ## 4. `/public/` folder structure
 
 ### `/public/index.php`
-	- ENTRY POINT to the whole OCPL code - this cde shoudl route requests to proper Controller
-	- finally it should be the only PHP script in `/public` folder
+	- **ENTRY POINT** to the whole OCPL code - this code should route requests to proper Controller
+	- finally it should be THE ONLY (?) PHP script in `/public` folder	
 	
+### `/public/views/`
+	- **contains** JS + CSS strictly specific for given view
+	- structure of this folder should reflect structure of `/srv/Views/` folder
+	- if given view has other static content (like images) which are usefull ONLY by this view
+	these images can be stored here as well
+
 ### `/public/js/libs/`
-	- JS external libs which are hosted in OCPL code (like tinyMCE)
+	- **contains** JS external libs which are hosted in OCPL code (like tinyMCE)
 	- every lib has its own folder + README file with description how to update this lib
 	- JS shoudl be loaded to Views in OCPL code by ONE chunk (every lib has only one reference in PHP code)
-	
-### `/public/js/`
 
+### `/public/js/`
+	- **contains** JS "common" scripts used by many views - but not external libs (see above)
+	- TODO: do we need to store anything here ?!
 
 ### `/public/css/`
-### `/public/views/`
-### `/public/images/`
+	- **contains** CSS "common" files used by many views
+	- TODO: do we need to store anything here ?!
+
+### `/public/img/`
+	- **contains** common used images, icons etc.
+	- images should be grouped in logical structure of folders
+	- every folder with images should contains README file with description of origin/author of images
 
 ## 5. `/srv/` folder structure
+
 ### `/srv/Controllers/`
 ### `/srv/Models/`
 ### `/srv/Views/`
 ### `/srv/Utils/`
 ### `/srv/Libs/`
+	- **contains** EXTERNAL PHP libraries hosted in OCPL code
+	- every libraru should be stored in separate folder 
+	- every folder should contain README with information about given lib + update description
 ### `/srv/`
