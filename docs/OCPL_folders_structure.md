@@ -1,11 +1,11 @@
 # Description of OCPL folders structure
 
 ## 1. Inspirations and assumptions
-	 - The idea of PHP universal structure of project: [https://github.com/php-pds/skeleton](https://github.com/php-pds/skeleton)
-	 - OCPL needs some cleanup
+	 - motivation OCPL needs some cleanup 
+	 - the idea of PHP project universal structure: [https://github.com/php-pds/skeleton](https://github.com/php-pds/skeleton)
+	 - all accesses to folders are regulated by attached in git .htaccess files
 
 ## 2. TODOs:
-
 	1. I'm not sure what is optimal way of handling these dirs: 
 		- `/okapi`
 		- `/mobile`
@@ -47,7 +47,7 @@
 	- **migration** - no migration needed - folder stays as is :)
 
 ### `/public/`
-	- **access**: NO access for webserver (PHP not allowed) - only command line
+	- **access**: access fr webserver (PHP not allowed) - only command line
 	- root-level directory for web server files
 	- this folder contains in generally: 
 		- index.php - the only PHP (dynamic) file here
@@ -59,7 +59,7 @@
 	- **migration** - see below
 
 ### `/resources/`
-	- **access**: RW for webserver, PHP not allowed
+	- **access**: RW for webserver, (TODO: PHP ?)
 	- a root-level directory for files which needs webserver RW access for uploaded files etc.
 	- let's store main directory structure in git, but the content should be ignored (by git-ignore)
 	- **migration** this should become more-less this what we called "ocpl-dynamic" so far
@@ -69,6 +69,11 @@
 	- a root-level directory for PHP source code files
 	- folder structure - see below
 	- **migration** - almost all PHP scripts shoudl finally land here, but we need to migrate it partially
+
+### `/i18n/`
+	- **access**:  No access from Internet, PHP can include
+
+
 
 ## 4. `/public/` folder structure
 
@@ -101,13 +106,23 @@
 	- every folder with images should contains README file with description of origin/author of images
 
 ## 5. `/srv/` folder structure
+	- all subfolders names start with capital letter
 
-### `/srv/Controllers/`
+### `/srv/Controllers/`	
+	- **migration** - generally the copy of the code of current `/Controllers`	
+	
 ### `/srv/Models/`
+	- **migration** - generally the copy of the code of current `/lib/Objects`
+	
 ### `/srv/Views/`
+	- **contains** code of PHP view templates
+	- finally these scripts are used (included) ONLY by `/srv/Utils/View/View` class
+	- **migration** - generally the copy of the PHP templates with code from current `/tpl/stdstyle`
+	
 ### `/srv/Utils/`
+	- **migration** - generally the copy of the code from current `/Utils`
+	
 ### `/srv/Libs/`
 	- **contains** EXTERNAL PHP libraries hosted in OCPL code
 	- every libraru should be stored in separate folder 
 	- every folder should contain README with information about given lib + update description
-### `/srv/`
