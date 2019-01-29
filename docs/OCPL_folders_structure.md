@@ -18,7 +18,7 @@
 ## 3. Folders structure: root-level folders
 
 ### `/` (project root folder)
-	- __access__: NO access for webserver (PHP not allowed)
+	- **access**: NO access for webserver (PHP not allowed)
 	- finally it contains only:
 		- README.md
 		- LICENSE.txt
