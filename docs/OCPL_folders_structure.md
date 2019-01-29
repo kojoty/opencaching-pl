@@ -1,4 +1,4 @@
-# Description of OCPL folders structure
+# Description of OCPL folders structure (draft)
 
 ## 1. Inspirations and assumptions
 	 - motivation OCPL needs some cleanup 
