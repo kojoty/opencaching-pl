@@ -82,5 +82,3 @@ $site['debugModeEnabled'] = false;
  */
 $site['displayOnlineUsers'] = true;
 
-
- *
